@@ -1,5 +1,45 @@
 @import "tailwindcss";
 
-@theme inline {
-  --font-sans: var(--font-geist-sans);
+@theme {
+  /* Palette from the mockups. The soft tints are darkened just enough to meet
+     WCAG 2.2 AA contrast on cream (3:1 for large text, 4.5:1 for body text). */
+  --color-cream: #f7f1ea;
+  --color-ink: #1c1a1a;
+  --color-plum: #7a0d7c; /* 8.6:1 */
+  --color-plum-soft: #a65baf; /* 3.95:1, large text only */
+  --color-teal: #0f6b70; /* 5.6:1 */
+  --color-teal-soft: #468e8f; /* 3.4:1, large text only */
+
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-cream font-sans text-ink;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-4 outline-plum;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0s !important;
+    }
+  }
+}
+
+/* Stand-in for the hero photo until real images exist. */
+@utility bg-hero-placeholder {
+  background: linear-gradient(
+    to bottom,
+    #1b1f4b 0%,
+    #3a3470 45%,
+    #6b4f86 62%,
+    #e8774a 70%,
+    #2a2d44 74%,
+    #d9dbe6 100%
+  );
 }
