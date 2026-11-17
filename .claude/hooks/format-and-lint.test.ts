@@ -1,29 +1,38 @@
 import { describe, expect, it } from "vitest";
 import { toolsFor } from "./format-and-lint.ts";
 
+const root = "/repo";
+
 describe("toolsFor", () => {
   it("formats and lints TypeScript", () => {
-    expect(toolsFor("src/app/page.tsx")).toEqual({
+    expect(toolsFor(`${root}/src/app/page.tsx`, root)).toEqual({
       prettier: true,
       eslint: true,
+      content: false,
     });
   });
 
-  it("only formats Markdown and CSS", () => {
-    expect(toolsFor("content/a.mdx")).toEqual({
+  it("formats and validates content files", () => {
+    expect(toolsFor(`${root}/content/projects/a/index.mdx`, root)).toEqual({
       prettier: true,
       eslint: false,
-    });
-    expect(toolsFor("src/app/globals.css")).toEqual({
-      prettier: true,
-      eslint: false,
+      content: true,
     });
   });
 
-  it("skips binary files", () => {
-    expect(toolsFor("public/hero.jpg")).toEqual({
+  it("validates content images without formatting them", () => {
+    expect(toolsFor(`${root}/content/projects/a/cover.jpg`, root)).toEqual({
       prettier: false,
       eslint: false,
+      content: true,
+    });
+  });
+
+  it("only formats CSS", () => {
+    expect(toolsFor(`${root}/src/app/globals.css`, root)).toEqual({
+      prettier: true,
+      eslint: false,
+      content: false,
     });
   });
 });

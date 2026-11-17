@@ -1,7 +1,14 @@
+import { projects } from "#site/content";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+import { CATEGORIES } from "@/lib/categories";
 
-const ROUTES = ["/", "/projects", "/projects/music"];
+const ROUTES = [
+  "/",
+  "/projects",
+  ...CATEGORIES.map((category) => `/projects/${category}`),
+  ...projects.map((p) => `/projects/${p.category}/${p.slug}`),
+];
 
 for (const route of ROUTES) {
   test(`${route} has no WCAG 2.2 AA violations`, async ({ page }) => {

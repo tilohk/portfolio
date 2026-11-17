@@ -1,5 +1,8 @@
+import { projects } from "#site/content";
 import type { Metadata } from "next";
 import { FilterTabs } from "@/components/project/filter-tabs";
+import { ProjectGrid } from "@/components/project/project-grid";
+import { sortByDate } from "@/lib/projects";
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -8,10 +11,10 @@ export const metadata: Metadata = {
 
 export default function ProjectsPage() {
   return (
-    <div className="px-6 pb-10 lg:px-16 lg:pt-8">
+    <div className="space-y-10 px-6 pb-16 lg:px-16 lg:pt-8">
       <h1 className="sr-only">Projects</h1>
       <FilterTabs active="all" />
-      <p className="mt-10 text-lg">Case studies are on their way.</p>
+      <ProjectGrid projects={sortByDate(projects)} />
     </div>
   );
 }
