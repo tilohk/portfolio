@@ -2,3 +2,8 @@ ignoredBuiltDependencies:
   - lefthook # hooks are installed via the "prepare" script instead
   - sharp
   - unrs-resolver
+
+overrides:
+  # puppeteer-core@25.18.1 (via @lhci/cli → lighthouse) is listed on npm but its tarball 404s.
+  # Remove once `pnpm view puppeteer-core@25.18.1 dist.tarball` downloads again.
+  puppeteer-core@25.18.1: 25.18.0

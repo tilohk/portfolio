@@ -26,6 +26,7 @@ Personal portfolio (about, projects/case studies, journal, resume, contact). The
 | Dev server         | `pnpm dev`                             |
 | Unit tests         | `pnpm test` (watch: `pnpm test:watch`) |
 | E2E + a11y         | `pnpm build && pnpm test:e2e`          |
+| Lighthouse budgets | `pnpm build && pnpm lighthouse`        |
 | Everything CI runs | `pnpm verify`                          |
 
 The contact form needs `.env.local` (see `.env.example`). E2E tests don't: they send to a local mock of the Resend API (`tests/e2e/mock-resend.ts`).

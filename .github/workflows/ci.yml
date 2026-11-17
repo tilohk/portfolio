@@ -54,3 +54,19 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+
+  lighthouse:
+    name: lighthouse
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+      - run: pnpm build
+      # Budgets live in lighthouserc.json; the runner's preinstalled Chrome is used.
+      - run: pnpm lighthouse
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: lighthouse-report
+          path: lighthouse-report/
+          retention-days: 7

@@ -1,8 +1,4 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "entry": [
-    ".claude/hooks/*.ts",
-    "velite.config.ts",
-    "tests/e2e/mock-resend.ts"
-  ]
+  "entry": [".claude/hooks/*.ts", "velite.config.ts"]
 }

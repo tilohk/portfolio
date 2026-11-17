@@ -18,7 +18,8 @@
     "test:e2e": "playwright test",
     "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm knip && pnpm test:coverage && pnpm build && pnpm test:e2e",
     "prepare": "lefthook install && velite build",
-    "content": "velite build"
+    "content": "velite build",
+    "lighthouse": "lhci autorun"
   },
   "dependencies": {
     "next": "16.4.6",
@@ -30,6 +31,7 @@
     "@axe-core/playwright": "^4.14.0",
     "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.4",
+    "@lhci/cli": "0.16.1",
     "@playwright/test": "^1.65.1",
     "@tailwindcss/turbopack": "4.3.3",
     "@types/node": "^24.19.2",
