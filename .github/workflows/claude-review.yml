@@ -1,0 +1,49 @@
+name: Claude review
+
+on:
+  pull_request:
+    types: [opened, ready_for_review, reopened]
+
+concurrency:
+  group: claude-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    # Dependabot PRs can't read repository secrets, and drafts aren't ready for review.
+    if: github.actor != 'dependabot[bot]' && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          # Runs on a Claude Pro/Max subscription; create the token with `claude setup-token`.
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ github.event.pull_request.number }}
+
+            Review this pull request against the project rules in CLAUDE.md and .claude/rules/.
+            The PR branch is checked out in the working directory.
+
+            In order of priority:
+            1. What could be removed? Flag speculative abstractions, unused code, wrapper
+               components, new dependencies without a clear need, and changes outside the PR's scope.
+            2. Correctness bugs and missing tests for changed behavior.
+            3. Accessibility (WCAG 2.2 AA) and security issues.
+
+            Report only real, specific problems, each with a concrete fix. If there are none,
+            say so in one line. Don't comment on formatting or style that the linters already enforce.
+
+            Use `gh pr comment` for a short top-level summary.
+            Use `mcp__github_inline_comment__create_inline_comment` (with `confirmed: true`) for issues tied to specific lines.
+            Only post GitHub comments; don't submit review text as messages.
+          claude_args: |
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Read,Grep,Glob"
