@@ -12,6 +12,7 @@ const ROUTES = [
   "/journal",
   ...posts.map((p) => `/journal/${p.slug}`),
   "/resume",
+  "/contact",
 ];
 
 for (const route of ROUTES) {
