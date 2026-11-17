@@ -1,6 +1,6 @@
 import { projects } from "#site/content";
 import Link from "next/link";
-import { sortByDate } from "@/lib/projects";
+import { sortByDate } from "@/lib/dates";
 
 const DISCIPLINES = [
   "Software development",

@@ -2,7 +2,7 @@ import { projects } from "#site/content";
 import type { Metadata } from "next";
 import { FilterTabs } from "@/components/project/filter-tabs";
 import { ProjectGrid } from "@/components/project/project-grid";
-import { sortByDate } from "@/lib/projects";
+import { sortByDate } from "@/lib/dates";
 
 export const metadata: Metadata = {
   title: "Projects",

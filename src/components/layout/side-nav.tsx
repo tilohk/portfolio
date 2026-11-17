@@ -11,7 +11,7 @@ const NAV_ITEMS = [
 
 export function SideNav() {
   return (
-    <header className="px-6 pt-6 pb-8 lg:sticky lg:top-0 lg:h-dvh lg:px-16 lg:pt-8">
+    <header className="px-6 pt-6 pb-8 lg:sticky lg:top-0 lg:h-dvh lg:px-16 lg:pt-8 print:hidden">
       <Link
         href="/"
         className="text-lg tracking-[0.2em] uppercase font-stretch-expanded"

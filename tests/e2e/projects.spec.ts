@@ -1,7 +1,7 @@
 import { projects } from "#site/content";
 import { expect, test } from "@playwright/test";
 import { CATEGORIES } from "@/lib/categories";
-import { sortByDate } from "@/lib/projects";
+import { sortByDate } from "@/lib/dates";
 
 // Expectations come from the generated content, so the tests keep working as content changes.
 const titlesIn = (category?: string) =>
