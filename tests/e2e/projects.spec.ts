@@ -76,3 +76,11 @@ test("shows the not-found page for unknown categories", async ({ page }) => {
     /noindex/,
   );
 });
+
+test("the filter stays in view while scrolling the grid", async ({ page }) => {
+  await page.goto("/projects");
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await expect(
+    page.getByRole("navigation", { name: "Filter projects" }),
+  ).toBeInViewport();
+});

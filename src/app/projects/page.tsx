@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function ProjectsPage() {
   return (
-    <div className="space-y-10 px-6 pb-16 lg:px-16 lg:pt-8">
+    <div className="space-y-6 px-6 pb-16 lg:px-16 lg:pt-4">
       <h1 className="sr-only">Projects</h1>
       <FilterTabs active="all" />
       <ProjectGrid projects={sortByDate(projects)} />

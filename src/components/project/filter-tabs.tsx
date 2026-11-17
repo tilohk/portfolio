@@ -12,14 +12,19 @@ const FILTERS = [
 
 export function FilterTabs({ active }: { active: Category | "all" }) {
   return (
-    <nav aria-label="Filter projects">
-      <ul className="flex flex-wrap gap-x-8 gap-y-2 lg:justify-between">
+    <nav
+      aria-label="Filter projects"
+      className="sticky top-0 z-10 bg-cream py-4"
+    >
+      <ul className="flex justify-between gap-4 lg:justify-center lg:gap-x-16">
         {FILTERS.map((filter) => (
           <li key={filter.value}>
+            {/* The hidden bold copy (::after) reserves the bold width, so hovering doesn't shift the row. */}
             <Link
               href={filter.href}
               aria-current={filter.value === active ? "page" : undefined}
-              className="text-3xl font-extrabold tracking-[0.08em] text-teal-soft uppercase font-stretch-expanded transition-colors hover:text-teal aria-[current=page]:text-teal lg:text-[clamp(1.875rem,calc((100vw-34rem)/21),4rem)]"
+              data-label={filter.label}
+              className="inline-flex origin-bottom flex-col text-filter font-light tracking-[0.08em] text-teal uppercase transition-[font-weight,scale] duration-200 after:invisible after:h-0 after:overflow-hidden after:font-extrabold after:content-[attr(data-label)/''] hover:scale-110 hover:font-extrabold aria-[current=page]:scale-110 aria-[current=page]:font-extrabold motion-reduce:transition-none xl:font-stretch-expanded"
             >
               {filter.label}
             </Link>
