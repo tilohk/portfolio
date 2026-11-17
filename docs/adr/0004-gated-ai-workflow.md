@@ -16,6 +16,7 @@ Commit the AI workflow to the repo, so it's versioned, reviewed and visible:
 - `.claude/settings.json` hooks enforce what rules can only ask for. They block writes to secrets, the lockfile and snapshot baselines. They block force pushes, skipped git hooks and production deploys. They format and lint every edit, and they refuse to end a turn while types or related tests fail.
 - Hook scripts are TypeScript run directly by Node 24, and they're unit-tested like application code.
 - A `verify` skill runs the full CI plus a simplicity review before work is reported as done.
+- A Claude review workflow (`.github/workflows/claude-review.yml`) reviews each PR on GitHub against the same rules, leading with "what could be removed?".
 
 ## Consequences
 
