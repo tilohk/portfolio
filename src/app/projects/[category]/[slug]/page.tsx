@@ -4,6 +4,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { MdxContent } from "@/components/mdx-content";
 import { PageTitle } from "@/components/page-title";
+import { BASE_OPEN_GRAPH } from "@/lib/site";
 
 // Every path is prerendered from generateStaticParams, so reading params up front is cheap and keeps
 // the full page in the static HTML (no streaming, works without JavaScript).
@@ -28,7 +29,21 @@ export async function generateMetadata({
   params,
 }: PageProps<"/projects/[category]/[slug]">): Promise<Metadata> {
   const project = await getProject(params);
-  return { title: project.title, description: project.summary };
+  return {
+    title: project.title,
+    description: project.summary,
+    openGraph: {
+      ...BASE_OPEN_GRAPH,
+      images: [
+        {
+          url: project.cover.src,
+          width: project.cover.width,
+          height: project.cover.height,
+          alt: project.coverAlt,
+        },
+      ],
+    },
+  };
 }
 
 export default async function CaseStudyPage({

@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import { Archivo } from "next/font/google";
 import { SideNav } from "@/components/layout/side-nav";
+import {
+  BASE_OPEN_GRAPH,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  siteUrl,
+} from "@/lib/site";
 import "./globals.css";
 
 const archivo = Archivo({
@@ -10,8 +16,12 @@ const archivo = Archivo({
 });
 
 export const metadata: Metadata = {
-  title: { default: "Tilo Hauk", template: "%s · Tilo Hauk" },
-  description: "Software developer, creative technologist and music producer.",
+  metadataBase: new URL(siteUrl()),
+  title: { default: SITE_NAME, template: `%s · ${SITE_NAME}` },
+  description: SITE_DESCRIPTION,
+  openGraph: BASE_OPEN_GRAPH,
+  twitter: { card: "summary_large_image" },
+  alternates: { types: { "application/rss+xml": "/feed.xml" } },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

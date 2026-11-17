@@ -1,6 +1,7 @@
 import { projects } from "#site/content";
 import Link from "next/link";
 import { sortByDate } from "@/lib/dates";
+import { SITE_NAME, siteUrl } from "@/lib/site";
 
 const DISCIPLINES = [
   "Software development",
@@ -9,11 +10,27 @@ const DISCIPLINES = [
   "UI/UX design",
 ];
 
+// Structured data so search engines understand who this site is about.
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: SITE_NAME,
+  url: siteUrl(),
+  jobTitle: "Software developer",
+  knowsAbout: DISCIPLINES,
+  sameAs: ["https://github.com/tilohk"],
+};
+
 export default function HomePage() {
   const latest = sortByDate(projects)[0];
 
   return (
     <div className="grid lg:min-h-dvh lg:grid-cols-[1fr_50vw]">
+      <script
+        type="application/ld+json"
+        // JSON-LD must be inline; the content is static and built from constants.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+      />
       <div className="flex flex-col justify-between gap-12 px-6 pb-10 lg:items-end lg:px-6 lg:pt-8">
         <div>
           <h1 className="sr-only">
