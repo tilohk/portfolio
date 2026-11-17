@@ -1,0 +1,4 @@
+ignoredBuiltDependencies:
+  - lefthook # hooks are installed via the "prepare" script instead
+  - sharp
+  - unrs-resolver

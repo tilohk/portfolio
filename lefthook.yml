@@ -1,0 +1,16 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - name: prettier
+      glob: "*.{ts,tsx,js,mjs,json,md,mdx,css,yml,yaml}"
+      run: pnpm prettier --write {staged_files}
+      stage_fixed: true
+    - name: eslint
+      glob: "*.{ts,tsx,js,mjs}"
+      run: pnpm eslint --fix {staged_files}
+      stage_fixed: true
+
+commit-msg:
+  jobs:
+    - name: commitlint
+      run: pnpm commitlint --edit {1}
