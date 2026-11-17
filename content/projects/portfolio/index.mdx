@@ -1,0 +1,38 @@
+---
+title: This portfolio
+slug: portfolio
+category: software
+date: 2026-11-17
+summary: A personal portfolio built as a showcase of modern web development and a gated, AI-assisted workflow.
+role: Design and development
+stack:
+  [
+    Next.js 16,
+    React 19,
+    TypeScript,
+    Tailwind CSS v4,
+    Velite,
+    Vitest,
+    Playwright,
+    Claude Code,
+  ]
+cover: ./cover.jpg
+coverAlt: The portfolio landing page, with a purple navigation on cream on the left and a night-sky gradient on the right.
+links:
+  repo: https://github.com/tilohk/portfolio
+---
+
+## Context
+
+I wanted a portfolio that shows not only finished work but also how I build software. So the repository is part of the showcase.
+
+## Approach
+
+- **Static by default.** Next.js App Router with Server Components. Pages are prerendered, and the project filter is made of static routes, so it works without JavaScript.
+- **Content as code.** Case studies are MDX files validated by Zod schemas at build time. Invalid content fails the build.
+- **Accessible from the start.** Every route is checked with axe on desktop and mobile in CI. The palette from my mockups was adjusted where it fell short of WCAG AA contrast.
+- **AI with guardrails.** Claude Code writes much of the code, but it works inside rules and tested hooks. Those block writes to secrets, force pushes and skipped checks, and they won't let a task finish while types or tests fail. The first rule is to keep the code simple.
+
+## What the tests caught
+
+My first filter version used URL query parameters. A test that runs without JavaScript showed that the filter vanished, because the streamed part of the page needs JavaScript to appear. Static category routes fixed it, and the lesson is now part of the rules the AI works with.

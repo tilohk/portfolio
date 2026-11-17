@@ -17,7 +17,8 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm knip && pnpm test:coverage && pnpm build && pnpm test:e2e",
-    "prepare": "lefthook install"
+    "prepare": "lefthook install && velite build",
+    "content": "velite build"
   },
   "dependencies": {
     "next": "16.4.6",
@@ -43,6 +44,7 @@
     "tailwindcss": "4.3.3",
     "typescript": "^5",
     "typescript-eslint": "^8.73.0",
+    "velite": "^0.4.0",
     "vitest": "^5.1.0"
   },
   "packageManager": "pnpm@10.34.9",

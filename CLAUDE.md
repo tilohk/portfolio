@@ -30,6 +30,7 @@ Personal portfolio (about, projects/case studies, journal, resume, contact). The
 
 ## Layout
 
+- `content/`: MDX content, validated by the schemas in `velite.config.ts` (see `.claude/rules/content.md`)
 - `src/app/`: routes (App Router)
 - `src/components/`: UI, grouped by feature
 - `src/lib/`: data access and logic (unit-tested, coverage ≥ 80%)
