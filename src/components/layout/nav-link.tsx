@@ -16,7 +16,7 @@ export function NavLink({
     <Link
       href={href}
       aria-current={isActive ? "page" : undefined}
-      className="text-xl font-extrabold tracking-[0.12em] text-plum uppercase font-stretch-expanded transition-colors hover:text-plum-soft aria-[current=page]:text-plum-soft lg:text-4xl"
+      className="text-2xl font-extrabold tracking-[0.12em] text-plum uppercase font-stretch-expanded transition-colors hover:text-plum-soft aria-[current=page]:text-plum-soft lg:text-nav"
     >
       {children}
     </Link>
