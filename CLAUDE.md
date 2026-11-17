@@ -28,6 +28,8 @@ Personal portfolio (about, projects/case studies, journal, resume, contact). The
 | E2E + a11y         | `pnpm build && pnpm test:e2e`          |
 | Everything CI runs | `pnpm verify`                          |
 
+The contact form needs `.env.local` (see `.env.example`). E2E tests don't: they send to a local mock of the Resend API (`tests/e2e/mock-resend.ts`).
+
 ## Layout
 
 - `content/`: MDX content, validated by the schemas in `velite.config.ts` (see `.claude/rules/content.md`)
