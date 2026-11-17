@@ -3,11 +3,11 @@ description: Install the pinned Node and pnpm from mise.toml and restore the pnp
 runs:
   using: composite
   steps:
-    - uses: jdx/mise-action@v3
+    - uses: jdx/mise-action@v5
     - id: store
       shell: bash
       run: echo "path=$(pnpm store path)" >> "$GITHUB_OUTPUT"
-    - uses: actions/cache@v4
+    - uses: actions/cache@v6
       with:
         path: ${{ steps.store.outputs.path }}
         key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
