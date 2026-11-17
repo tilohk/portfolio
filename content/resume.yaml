@@ -1,0 +1,30 @@
+# Placeholder resume. Replace every entry with real data; the schema in velite.config.ts validates it.
+headline: Placeholder headline, e.g. "Software developer with a focus on frontend and creative technology"
+
+experience:
+  - role: Placeholder role
+    company: Placeholder company
+    location: Placeholder city
+    start: "2023-01"
+    highlights:
+      - Placeholder highlight. Describe an outcome, not a duty.
+  - role: Placeholder role
+    company: Placeholder company
+    start: "2020-06"
+    end: "2022-12"
+    highlights:
+      - Placeholder highlight.
+
+education:
+  - degree: Placeholder degree
+    school: Placeholder school
+    start: "2016-10"
+    end: "2020-05"
+
+skills:
+  - group: Languages
+    items: [TypeScript, JavaScript]
+  - group: Frameworks
+    items: [React, Next.js, Tailwind CSS]
+  - group: Testing
+    items: [Vitest, Playwright]

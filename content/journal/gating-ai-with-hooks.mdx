@@ -1,0 +1,31 @@
+---
+title: Rules ask, hooks enforce
+slug: gating-ai-with-hooks
+date: 2026-11-17
+summary: How I let Claude Code write most of this portfolio without letting it overengineer, skip checks or touch secrets.
+---
+
+AI coding agents are fast, but in my experience they tend to overengineer. They add abstractions nobody asked for, skip a failing check to get to "done", and edit files they shouldn't. For this portfolio I wanted the speed without those habits, so I treated the agent like any new teammate: clear rules, and automation where rules aren't enough.
+
+## Rules ask
+
+`CLAUDE.md` lists the non-negotiables, and the first one is simplicity: write the least code that solves the task, abstract only when something exists in three places, and prefer the platform over new dependencies. Path-scoped rules in `.claude/rules/` add details only when they matter, such as accessibility rules for components or "never invent metrics" for content.
+
+Rules are only instructions, though. An agent can read them and still forget them.
+
+## Hooks enforce
+
+Hooks are scripts that run on every action the agent takes. Mine are small TypeScript files, unit-tested like the rest of the code:
+
+- **Before a write**, guard against `.env` files, the lockfile and visual test baselines.
+- **Before a shell command**, block force pushes, skipped git hooks and production deploys.
+- **After every edit**, format and lint the file, and validate content against its schema. Remaining errors go straight back to the agent.
+- **Before the agent finishes**, run the type checker and the tests related to the change. While they fail, it can't finish.
+
+## What it caught
+
+The tests for the hooks found two bugs in my own patterns before they ever ran: the `rm -rf` guard matched nothing, and the `.env` guard would have blocked the harmless `.env.example`. Later, an end-to-end test that runs without JavaScript showed that my first project filter vanished entirely, because streamed content needs JavaScript to appear. Each lesson went back into the rules, so the agent doesn't repeat the mistake.
+
+## Takeaway
+
+Write down what you want in rules, and enforce what really matters with code. The [whole setup](https://github.com/tilohk/portfolio) is in the repository.

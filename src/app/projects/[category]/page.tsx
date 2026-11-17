@@ -4,7 +4,8 @@ import { notFound } from "next/navigation";
 import { FilterTabs } from "@/components/project/filter-tabs";
 import { ProjectGrid } from "@/components/project/project-grid";
 import { CATEGORIES, isCategory } from "@/lib/categories";
-import { filterByCategory, sortByDate } from "@/lib/projects";
+import { sortByDate } from "@/lib/dates";
+import { filterByCategory } from "@/lib/projects";
 
 // Every path is prerendered from generateStaticParams, so reading params up front is cheap and keeps
 // the full page in the static HTML (no streaming, works without JavaScript).

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { MdxContent } from "@/components/mdx-content";
+import { PageTitle } from "@/components/page-title";
 
 // Every path is prerendered from generateStaticParams, so reading params up front is cheap and keeps
 // the full page in the static HTML (no streaming, works without JavaScript).
@@ -37,10 +38,7 @@ export default async function CaseStudyPage({
 
   return (
     <article className="px-6 pb-16 lg:px-16 lg:pt-8">
-      <h1 className="text-3xl font-extrabold tracking-[0.08em] text-plum uppercase font-stretch-expanded lg:text-5xl">
-        {project.title}
-      </h1>
-      <p className="mt-4 max-w-prose text-lg">{project.summary}</p>
+      <PageTitle intro={project.summary}>{project.title}</PageTitle>
 
       <div className="relative mt-10 aspect-[16/10]">
         <Image
