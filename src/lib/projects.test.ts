@@ -19,4 +19,11 @@ describe("filterByCategory", () => {
     ]);
     expect(filterByCategory(projects, "other")).toEqual([]);
   });
+
+  it("includes projects listed under the category through alsoIn", () => {
+    const both = [
+      { title: "d", category: "software", alsoIn: ["music"] },
+    ] as const;
+    expect(filterByCategory(both, "music").map((p) => p.title)).toEqual(["d"]);
+  });
 });

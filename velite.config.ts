@@ -20,7 +20,9 @@ export default defineConfig({
       schema: s.object({
         title: s.string().max(80),
         slug: s.slug("projects"),
+        // `category` sets the URL. `alsoIn` lists the project under further filters.
         category: s.enum(CATEGORIES),
+        alsoIn: s.array(s.enum(CATEGORIES)).optional(),
         date: s.isodate(),
         summary: s.string().max(200),
         role: s.string(),
