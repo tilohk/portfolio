@@ -2,15 +2,12 @@ import { projects } from "#site/content";
 import { expect, test } from "@playwright/test";
 import { CATEGORIES, type Category } from "@/lib/categories";
 import { sortByDate } from "@/lib/dates";
+import { filterByCategory } from "@/lib/projects";
 
 // Expectations come from the generated content, so the tests keep working as content changes.
-const titlesIn = (category?: Category) =>
-  sortByDate(
-    projects.filter(
-      (p) =>
-        !category || p.category === category || p.alsoIn?.includes(category),
-    ),
-  ).map((p) => p.title);
+// filterByCategory has its own unit tests, so this checks the pages, not the filter logic.
+const titlesIn = (category: Category | "all" = "all") =>
+  sortByDate(filterByCategory(projects, category)).map((p) => p.title);
 
 test.describe("project filter without JavaScript", () => {
   // Each category is its own static page, so filtering must work without JavaScript.
