@@ -35,16 +35,3 @@
     }
   }
 }
-
-/* Stand-in for the hero photo until real images exist. */
-@utility bg-hero-placeholder {
-  background: linear-gradient(
-    to bottom,
-    #1b1f4b 0%,
-    #3a3470 45%,
-    #6b4f86 62%,
-    #e8774a 70%,
-    #2a2d44 74%,
-    #d9dbe6 100%
-  );
-}

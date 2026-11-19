@@ -1,0 +1,43 @@
+---
+title: audible_spec
+slug: audible-spec
+category: software
+alsoIn: [music]
+date: 2026-11-19
+summary: An open-source instrument plugin that reads an image as a spectrogram, turns it into sound and lets you play it from MIDI in your DAW.
+role: Design and development
+stack: [C++20, JUCE 8, Python, CMake, GitHub Actions, Claude Code]
+cover: ./cover.jpg
+coverAlt: The plugin window. On the left, a grayscale photo of a cracked wall. On the right, its spectrogram with teal start and loop markers. Below are knobs for envelope, pitch, sample, filter and output, and a button to drag the WAV to a track.
+links:
+  repo: https://github.com/tilohk/audible_spec
+---
+
+## Context
+
+During an earlier project I built a Python script that turns an image into sound. It reads the image as a spectrogram: left to right is time, bottom to top is frequency and brightness is loudness. Since an image carries no phase information, the script estimates it with Griffin-Lim.
+
+The script worked, but I wanted to use it directly while making music with Ableton. So I turned it into an experimental instrument plugin: load an image, render it and play the result from MIDI like a sampler.
+
+The plugin is open source under the AGPLv3. It runs as VST3, AU, LV2 and a standalone app on macOS, Windows and Linux.
+
+## Approach
+
+I built it in Claude Code sessions with a strict workflow:
+
+- **Phases with gates.** The work was split into nine phases, from toolchain to distribution. Each phase had a written gate, a list of checks that all had to pass, and I confirmed each one before the next phase started.
+- **Python stays the reference.** The original script defines what "correct" means. The C++ port is tested against fixtures exported from it, and up to the magnitude spectrogram both match within about 1e-6.
+- **Real-time safety, enforced.** Code on the audio thread must never allocate, lock or wait. A lint hook scans the marked audio-thread code and rejects edits that break this. Rendering runs on a background thread and swaps in without clicks while notes keep playing.
+- **Hooks instead of trust.** Hooks format the code, run the real-time lint, and build and test before a turn can end. A pre-commit hook runs the same checks.
+- **Visual design.** As I'm not satisfied with ai-generated UI and design decisions, I made a quick mockup before and manually supervised the design decisions during the coding process.
+
+## What it does
+
+- Loading an image (PNG, JPEG, HEIC, GIF and more) and use configurable render settings to generate the spectrogram. Parameter changes which influence the image directly are shown live.
+- Every parameter changes the outcome in a more or less unexpected way, so it encourages experimenting. There is also a button to randomize these settings.
+- Playing MIDI with an envelope, pitch, loop, reverse and a filter. All playback parameters can be automated in the DAW.
+- The playing region on the spectrogram can be set and the rendered WAV can be dragged straight onto an audio track.
+
+## Outcome
+
+Version 1.0.1 is released on GitHub for macOS, Linux and Windows. It passes `pluginval` at strictness level 5 and Apple's `auval`. Every push is built and tested on macOS, Windows and Linux.

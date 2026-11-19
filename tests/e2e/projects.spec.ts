@@ -1,13 +1,13 @@
 import { projects } from "#site/content";
 import { expect, test } from "@playwright/test";
-import { CATEGORIES } from "@/lib/categories";
+import { CATEGORIES, type Category } from "@/lib/categories";
 import { sortByDate } from "@/lib/dates";
+import { filterByCategory } from "@/lib/projects";
 
 // Expectations come from the generated content, so the tests keep working as content changes.
-const titlesIn = (category?: string) =>
-  sortByDate(projects.filter((p) => !category || p.category === category)).map(
-    (p) => p.title,
-  );
+// filterByCategory has its own unit tests, so this checks the pages, not the filter logic.
+const titlesIn = (category: Category | "all" = "all") =>
+  sortByDate(filterByCategory(projects, category)).map((p) => p.title);
 
 test.describe("project filter without JavaScript", () => {
   // Each category is its own static page, so filtering must work without JavaScript.
@@ -56,14 +56,20 @@ test.describe("project filter without JavaScript", () => {
   });
 });
 
-test("the landing page links to the newest project", async ({ page }) => {
+test.describe("the landing page links to the newest project", () => {
   const [newest] = sortByDate(projects);
   if (!newest) throw new Error("Expected at least one project in content/");
-  await page.goto("/");
-  await page.getByRole("link", { name: "Latest project" }).click();
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    newest.title,
-  );
+
+  // The text link and the cover area, which is named by its caption.
+  for (const name of ["Latest project", newest.title]) {
+    test(`through "${name}"`, async ({ page }) => {
+      await page.goto("/");
+      await page.getByRole("link", { name, exact: true }).click();
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+        newest.title,
+      );
+    });
+  }
 });
 
 // Unknown categories render on demand and stream, so the first response can be a 200.
