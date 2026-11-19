@@ -59,14 +59,20 @@ test.describe("project filter without JavaScript", () => {
   });
 });
 
-test("the landing page links to the newest project", async ({ page }) => {
+test.describe("the landing page links to the newest project", () => {
   const [newest] = sortByDate(projects);
   if (!newest) throw new Error("Expected at least one project in content/");
-  await page.goto("/");
-  await page.getByRole("link", { name: "Latest project" }).click();
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    newest.title,
-  );
+
+  // The text link and the cover area, which is named by its caption.
+  for (const name of ["Latest project", newest.title]) {
+    test(`through "${name}"`, async ({ page }) => {
+      await page.goto("/");
+      await page.getByRole("link", { name, exact: true }).click();
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+        newest.title,
+      );
+    });
+  }
 });
 
 // Unknown categories render on demand and stream, so the first response can be a 200.

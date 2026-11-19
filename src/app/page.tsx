@@ -1,4 +1,5 @@
 import { projects } from "#site/content";
+import Image from "next/image";
 import Link from "next/link";
 import { sortByDate } from "@/lib/dates";
 import { SITE_NAME, siteUrl } from "@/lib/site";
@@ -6,7 +7,7 @@ import { SITE_NAME, siteUrl } from "@/lib/site";
 const DISCIPLINES = [
   "Software development",
   "Creative technologies",
-  "Music producing & DJ",
+  "Music producing",
   "UI/UX design",
 ];
 
@@ -51,10 +52,35 @@ export default function HomePage() {
           </Link>
         )}
       </div>
-      <div
-        aria-hidden
-        className="aspect-[4/3] bg-hero-placeholder lg:aspect-auto"
-      />
+      {latest && (
+        // The caption names the link, so both images are decorative here.
+        <Link
+          href={`/projects/${latest.category}/${latest.slug}`}
+          className="relative block aspect-[4/3] overflow-hidden focus-visible:-outline-offset-4 focus-visible:outline-cream lg:aspect-auto"
+        >
+          {/* Blurred backdrop: decorative, so a small file is enough. Scaled up to hide the soft blur edges. */}
+          <Image
+            src={latest.cover}
+            alt=""
+            fill
+            sizes="10vw"
+            className="scale-125 object-cover blur-3xl"
+          />
+          {/* The uncropped cover, clearly off-center. */}
+          <figure className="absolute top-[12%] right-[8%] w-[70%] lg:top-[15%]">
+            <Image
+              src={latest.cover}
+              alt=""
+              priority
+              sizes="(min-width: 1024px) 33vw, 66vw"
+              className="h-auto w-full drop-shadow-2xl"
+            />
+            <figcaption className="mt-3 border-t-1 pt-1 text-xs tracking-[0.25em] text-cream uppercase">
+              {latest.title}
+            </figcaption>
+          </figure>
+        </Link>
+      )}
     </div>
   );
 }
