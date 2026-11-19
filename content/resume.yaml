@@ -1,30 +1,66 @@
-# Placeholder resume. Replace every entry with real data; the schema in velite.config.ts validates it.
-headline: Placeholder headline, e.g. "Software developer with a focus on frontend and creative technology"
+headline: Software developer building web applications for industrial IoT, from real-time production data to machine control.
 
 experience:
-  - role: Placeholder role
-    company: Placeholder company
-    location: Placeholder city
-    start: "2023-01"
+  - role: Software Developer, IoT / Industrial Software
+    company: SHS plus GmbH
+    location: Dinslaken
+    start: "2021-02"
     highlights:
-      - Placeholder highlight. Describe an outcome, not a duty.
-  - role: Placeholder role
-    company: Placeholder company
-    start: "2020-06"
-    end: "2022-12"
+      - Develop a web application that collects, processes and visualizes production data, built with TypeScript (React), Java Spring Boot and C# (.NET).
+      - Built a service that derives process intervals from real-time MQTT data and calculates their key metrics.
+      - Designed, prototyped and built a web application that controls the wall thickness of an extrusion line over OPC UA, using React, .NET and D3.js.
+      - Built visualization widgets for production data and REST APIs for two-way communication with external systems.
+      - Train customers and support them in production.
+  - role: Software Developer (part-time)
+    company: IT, Finance & Flow GmbH
+    location: Selm
+    start: "2024-01"
+    end: "2024-09"
     highlights:
-      - Placeholder highlight.
+      - Extended a React and Next.js web application for capturing invoices digitally.
+      - Built custom PDF generation for digital invoice documents.
+      - Implemented authentication and access control with Keycloak and JWT.
+  - role: Internship & Bachelor's Thesis
+    company: Daimler AG
+    location: Stuttgart
+    start: "2020-03"
+    end: "2021-02"
+    highlights:
+      - Developed and evaluated deep learning methods that detect anomalies in acoustic data from industrial transmission test benches.
+      - Built a convolutional autoencoder as the baseline and compared it with a denoising autoencoder and a one-class SVM across training configurations.
+  - role: Working Student, Web Development
+    company: com.on Webdesign GbR
+    location: Neukirchen-Vluyn
+    start: "2019-01"
+    end: "2020-02"
+    highlights:
+      - Designed and built websites for a holiday home and a goldsmith's workshop.
+  - role: Working Student, Software Development
+    company: SPS-Technik
+    location: Neukirchen-Vluyn
+    start: "2018-10"
+    end: "2020-02"
+    highlights:
+      - Extended a C++/MFC desktop application that controls and visualizes industrial PLC systems.
 
 education:
-  - degree: Placeholder degree
-    school: Placeholder school
-    start: "2016-10"
-    end: "2020-05"
+  - degree: B.Sc. Media Informatics
+    school: Rhine-Waal University of Applied Sciences
+    start: "2017-10"
+    end: "2021-02"
 
 skills:
   - group: Languages
-    items: [TypeScript, JavaScript]
-  - group: Frameworks
-    items: [React, Next.js, Tailwind CSS]
-  - group: Testing
-    items: [Vitest, Playwright]
+    items: [TypeScript, Java, C#, Python, C++]
+  - group: Frontend
+    items: [React, Next.js, Tailwind CSS, D3.js]
+  - group: Backend
+    items: [Spring Boot, .NET, Node.js]
+  - group: Databases
+    items: [PostgreSQL, TimescaleDB, MariaDB]
+  - group: Protocols
+    items: [OPC UA, MQTT, REST, WebSocket]
+  - group: Data science
+    items: [TensorFlow, SciPy, Pandas, Matplotlib]
+  - group: Tools
+    items: [Docker, Git, Linux, Maven, Jira, Jupyter]
