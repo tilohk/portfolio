@@ -24,7 +24,7 @@ export function SideNav() {
   );
 
   return (
-    <header className="relative z-20 flex items-center justify-between px-6 py-5 lg:sticky lg:top-0 lg:block lg:h-dvh lg:px-16 lg:pt-8 print:hidden">
+    <header className="relative z-20 flex h-header items-center justify-between px-6 lg:sticky lg:top-0 lg:block lg:h-dvh lg:px-16 lg:pt-8 print:hidden">
       <Link
         href="/"
         className="text-lg tracking-[0.2em] uppercase font-stretch-expanded"

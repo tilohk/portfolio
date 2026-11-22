@@ -32,8 +32,8 @@ export default function HomePage() {
         // JSON-LD must be inline; the content is static and built from constants.
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
       />
-      {/* On mobile the text fills the top half of the screen below the 4.25rem header. */}
-      <div className="flex min-h-[calc(50dvh-4.25rem)] flex-col justify-between gap-12 px-6 pb-10 lg:min-h-0 lg:items-end lg:px-6 lg:pt-8">
+      {/* On mobile the header and this text fill the top half of the screen. */}
+      <div className="flex min-h-[calc(50dvh-var(--spacing-header))] flex-col justify-between gap-12 px-6 pb-10 lg:min-h-0 lg:items-end lg:px-6 lg:pt-8">
         <div>
           <h1 className="sr-only">
             Tilo Hauk, software developer and music producer
