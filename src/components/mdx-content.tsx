@@ -11,7 +11,7 @@ function renderMdx(code: string) {
 
 export function MdxContent({ code }: { code: string }) {
   return (
-    <div className="max-w-prose space-y-4 text-lg leading-relaxed [&_a]:underline [&_h2]:mt-10 [&_h2]:text-sm [&_h2]:tracking-[0.25em] [&_h2]:text-teal [&_h2]:uppercase [&_li]:ml-5 [&_li]:list-disc [&_strong]:font-semibold">
+    <div className="max-w-prose space-y-4 text-lg leading-relaxed [&_a]:underline [&_h2]:mt-10 [&_h2]:text-sm [&_h2]:tracking-[0.25em] [&_h2]:text-teal [&_h2]:uppercase [&_li]:ml-5 [&_li]:list-disc [&_strong]:font-semibold [&>h2:first-child]:mt-0">
       {renderMdx(code)}
     </div>
   );
