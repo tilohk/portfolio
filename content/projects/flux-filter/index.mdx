@@ -1,0 +1,41 @@
+---
+title: flux_filter
+slug: flux-filter
+category: software
+alsoIn: [music]
+date: 2026-11-22
+summary: An open-source formant filter plugin. A field of living resonant cells shapes any sound into vowels, throats and growls, from a still filter to an unstable organism.
+role: Design and development
+stack: [C++20, JUCE 8, CMake, GitHub Actions, Claude Code]
+cover: ./cover.jpg
+coverAlt: The plugin window. At the top, an amber response curve with several formant peaks over a frequency scale. Below are the Shape, Flux and Character sections, with a large industrial Flux knob in the centre surrounded by an animated orange field, and two LFOs with a modulation panel at the bottom.
+links:
+  repo: https://github.com/tilohk/flux_filter
+---
+
+## Context
+
+flux_filter is an experimental filter plugin. It is a field of up to 16 resonant cells, grouped into up to five formants, that shapes any sound into vowels, throats and growls. The cells drift, feed on the input, ring into each other, and are born and die. **Flux** sets how alive the field is: at zero it is a still formant filter, turned up it becomes unstable and chaotic.
+
+The plugin is open source under the AGPLv3. It runs as VST3, AU, LV2 and a standalone app on macOS, Windows and Linux.
+
+## Approach
+
+I built it in Claude Code sessions, with the same phased workflow as [audible_spec](/projects/software/audible-spec):
+
+- **Concept first, then phases.** Each version started as a written concept with the decisions behind it. The work was then split into phases, and every phase recorded what was built and what was measured before the next one started.
+- **Listening decides.** The first engine was a bank of evenly spaced cells moved by one travelling wave. Technically it worked, but it sounded like a many-stage phaser. So I wrote a second concept and replaced the engine with a formant field whose cells live on their own.
+- **Simplify after trying it.** After the first listening of the new engine, the many small life controls felt unusual for a filter. I folded them into Flux as a single calm-to-chaotic macro and kept only Wander and Rasp beside it. The pitch anchor, stereo life and a third LFO were dropped.
+- **Measured, not assumed.** Offline DSP tests cover the field and the modulation. A preset check runs every factory preset through the real plugin and checks that the output is finite, limited, not silent and not too loud. A benchmark tracks the CPU cost per block.
+- **Visual design.** I supervised the interface by hand, from the layout to the look of the big Flux knob and the animated field around it.
+
+## What it does
+
+- Shapes the sound with nine throat shapes (a, e, i, o, u, nasal, growl, schwa, whisper) and the halfway points between them, plus Shift, Stretch, Resonance and Scatter.
+- Flux drives the cells' drift, coupling and life cycle together. Wander sets how far the chaos roams, Rasp adds jitter and a sub-octave growl.
+- Two LFOs can be dragged onto any knob. Each LFO has its own Flux control for extra chaos.
+- Saturation, drive and a damped feedback loop colour the sound, and the output has mix, auto gain and a limiter. It ships with 14 factory presets.
+
+## Outcome
+
+Version 1.0.0 is released on GitHub for macOS, Windows and Linux. It passes `pluginval` at strictness level 10 on VST3 and AU, and Apple's `auval`. At 48 kHz, 16 stereo cells with 16 modulation connections cost under 3 % of one CPU core on Apple Silicon. Every push is built and tested on macOS, Windows and Linux.
