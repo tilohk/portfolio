@@ -55,14 +55,14 @@ export default async function CaseStudyPage({
     <article className="px-6 pb-16 lg:px-16 lg:pt-8">
       <PageTitle intro={project.summary}>{project.title}</PageTitle>
 
-      <div className="relative mt-10 aspect-[16/10]">
+      <div className="relative mt-10 aspect-[16/10] max-w-3xl">
         <Image
           src={project.cover}
           alt={project.coverAlt}
           fill
           priority
           placeholder="blur"
-          sizes="(min-width: 1024px) calc(100vw - 28rem), 100vw"
+          sizes="(min-width: 48rem) 48rem, 100vw"
           className="object-cover"
         />
       </div>
