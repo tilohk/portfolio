@@ -46,7 +46,7 @@ export default function HomePage() {
         </div>
         {latest && (
           <Link
-            href={`/projects/${latest.category}/${latest.slug}`}
+            href={`/projects/${latest.slug}`}
             className="text-sm tracking-[0.25em] text-teal uppercase transition-colors hover:text-plum"
           >
             Latest project
@@ -56,7 +56,7 @@ export default function HomePage() {
       {latest && (
         // The caption names the link, so both images are decorative here.
         <Link
-          href={`/projects/${latest.category}/${latest.slug}`}
+          href={`/projects/${latest.slug}`}
           className="relative block h-[50dvh] overflow-hidden focus-visible:-outline-offset-4 focus-visible:outline-cream lg:h-auto"
         >
           {/* Blurred backdrop: decorative, so a small file is enough. Scaled up to hide the soft blur edges. */}

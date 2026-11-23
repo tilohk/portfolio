@@ -1,13 +1,11 @@
 import { posts, projects } from "#site/content";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
-import { CATEGORIES } from "@/lib/categories";
 
 const ROUTES = [
   "/",
   "/projects",
-  ...CATEGORIES.map((category) => `/projects/${category}`),
-  ...projects.map((p) => `/projects/${p.category}/${p.slug}`),
+  ...projects.map((p) => `/projects/${p.slug}`),
   "/about",
   "/journal",
   ...posts.map((p) => `/journal/${p.slug}`),

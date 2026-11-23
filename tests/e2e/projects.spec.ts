@@ -1,59 +1,52 @@
 import { projects } from "#site/content";
 import { expect, test } from "@playwright/test";
-import { CATEGORIES, type Category } from "@/lib/categories";
 import { sortByDate } from "@/lib/dates";
-import { filterByCategory } from "@/lib/projects";
 
 // Expectations come from the generated content, so the tests keep working as content changes.
-// filterByCategory has its own unit tests, so this checks the pages, not the filter logic.
-const titlesIn = (category: Category | "all" = "all") =>
-  sortByDate(filterByCategory(projects, category)).map((p) => p.title);
+test("lists all projects newest first, each with its tags", async ({
+  page,
+}) => {
+  await page.goto("/projects");
+  const sorted = sortByDate(projects);
+  await expect(page.getByRole("heading", { level: 2 })).toHaveText(
+    sorted.map((p) => p.title),
+  );
+  for (const project of sorted) {
+    await expect(
+      page
+        .getByRole("list", { name: `${project.title} tags` })
+        .getByRole("listitem"),
+    ).toHaveText(project.tags);
+  }
+});
 
-test.describe("project filter without JavaScript", () => {
-  // Each category is its own static page, so filtering must work without JavaScript.
-  test.use({ javaScriptEnabled: false });
+test("opens a case study from the grid, showing its tags", async ({ page }) => {
+  const [project] = projects;
+  if (!project) throw new Error("Expected at least one project in content/");
+  await page.goto("/projects");
+  await page.getByRole("link", { name: project.title }).click();
+  await expect(page).toHaveURL(`/projects/${project.slug}`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    project.title,
+  );
+  await expect(
+    page.getByRole("list", { name: "Tags" }).getByRole("listitem"),
+  ).toHaveText(project.tags);
+});
 
-  test("shows all projects newest first by default", async ({ page }) => {
-    await page.goto("/projects");
-    const filters = page.getByRole("navigation", { name: "Filter projects" });
-    await expect(filters.getByRole("link", { name: "all" })).toHaveAttribute(
-      "aria-current",
-      "page",
-    );
-    await expect(page.getByRole("heading", { level: 2 })).toHaveText(
-      titlesIn(),
-    );
-  });
+test.describe("old category URLs redirect", () => {
+  const [project] = projects;
+  if (!project) throw new Error("Expected at least one project in content/");
 
-  for (const category of CATEGORIES) {
-    test(`shows only ${category} projects on its page`, async ({ page }) => {
-      await page.goto("/projects");
-      const filters = page.getByRole("navigation", { name: "Filter projects" });
-
-      await filters.getByRole("link", { name: category }).click();
-
-      await expect(page).toHaveURL(`/projects/${category}`);
-      await expect(
-        filters.getByRole("link", { name: category }),
-      ).toHaveAttribute("aria-current", "page");
-      await expect(page.getByRole("heading", { level: 2 })).toHaveText(
-        titlesIn(category),
-      );
+  for (const [from, to] of [
+    [`/projects/software/${project.slug}`, `/projects/${project.slug}`],
+    ["/projects/music", "/projects"],
+  ] as const) {
+    test(`from ${from}`, async ({ page }) => {
+      await page.goto(from);
+      await expect(page).toHaveURL(to);
     });
   }
-
-  test("opens a case study from the grid", async ({ page }) => {
-    const [project] = projects;
-    if (!project) throw new Error("Expected at least one project in content/");
-    await page.goto("/projects");
-    await page.getByRole("link", { name: project.title }).click();
-    await expect(page).toHaveURL(
-      `/projects/${project.category}/${project.slug}`,
-    );
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-      project.title,
-    );
-  });
 });
 
 test.describe("the landing page links to the newest project", () => {
@@ -82,7 +75,7 @@ test.describe("case study images open in a zoomable dialog", () => {
     ["a Markdown image", /^Diagram of one span/],
   ] as const) {
     test(`from ${image}`, async ({ page }) => {
-      await page.goto(`/projects/${project.category}/${project.slug}`);
+      await page.goto(`/projects/${project.slug}`);
 
       await page.getByRole("link", { name }).click();
       const dialog = page.getByRole("dialog", { name });
@@ -99,21 +92,13 @@ test.describe("case study images open in a zoomable dialog", () => {
   }
 });
 
-// Unknown categories render on demand and stream, so the first response can be a 200.
+// Unknown projects render on demand and stream, so the first response can be a 200.
 // What matters is that visitors see the not-found page and that it is marked noindex.
-test("shows the not-found page for unknown categories", async ({ page }) => {
+test("shows the not-found page for unknown projects", async ({ page }) => {
   await page.goto("/projects/unknown");
   await expect(page.getByText("This page could not be found.")).toBeVisible();
   await expect(page.locator('meta[name="robots"]').first()).toHaveAttribute(
     "content",
     /noindex/,
   );
-});
-
-test("the filter stays in view while scrolling the grid", async ({ page }) => {
-  await page.goto("/projects");
-  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-  await expect(
-    page.getByRole("navigation", { name: "Filter projects" }),
-  ).toBeInViewport();
 });

@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 
 // Absolute URLs use the site origin, which is localhost:3000 outside Vercel.
 const contentPaths = [
-  ...projects.map((p) => `/projects/${p.category}/${p.slug}`),
+  ...projects.map((p) => `/projects/${p.slug}`),
   ...posts.map((p) => `/journal/${p.slug}`),
 ];
 

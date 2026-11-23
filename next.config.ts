@@ -7,6 +7,14 @@ import {
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
+  // Projects used to live under a category, e.g. /projects/software/flux-filter.
+  redirects: async () => [
+    {
+      source: "/projects/:category(software|music|other)/:slug*",
+      destination: "/projects/:slug*",
+      permanent: true,
+    },
+  ],
   turbopack: {
     rules: {
       "*.css": {
