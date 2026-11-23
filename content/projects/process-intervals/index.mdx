@@ -1,0 +1,39 @@
+---
+title: Real-time process intervals and KPIs
+slug: process-intervals
+category: software
+date: 2026-08-01
+summary: A .NET service that splits live production data from MQTT into intervals, calculates their KPIs in real time and links each interval to master data from ERP and MES.
+role: Lead developer
+stack: [C#, .NET, MQTT, REST]
+cover: ./cover.jpg
+coverAlt: Diagram of the data flow. A process signal from the MQTT pipeline rises and falls, dashed trigger lines mark where it changes, and the sections between them become intervals with KPIs and context, each linked to master data from ERP, MES and databases.
+---
+
+## Context
+
+My employer's main product is a virtual production assistant: software that collects, processes and visualizes production data. A stream of raw values only says so much. To compare and evaluate production, you need sections of time with a clear start and end.
+
+What such an interval stands for depends on how it is configured. It can be a single production cycle, a whole shift or day, or a stretch that starts when a value crosses a threshold, to record a specific part of the process such as a possible error.
+
+## My role
+
+I had the main responsibility for this feature, from the first release in 2023 through its ongoing development until 2026.
+
+## How it works
+
+- **Triggers on the MQTT pipeline.** The service subscribes to the MQTT pipeline that carries the live process data. Triggers decide when an interval starts and ends. Start and end can use separate triggers or the same one.
+- **Combined conditions.** A trigger can combine several conditions and nested subconditions with AND and OR. Each condition uses an operator such as "changed", "occurred" or "equals".
+- **KPIs while the interval runs and at its end.** Each interval calculates its KPIs continuously, so current values are available during the interval, and a final result once it closes. Typical KPIs are energy and material consumption, and average, minimum and maximum temperatures.
+- **Context data.** Each interval can be enriched with context data. This connects the real-time process data to production master data from ERP, MES or databases. The service first read this data straight from the database. Today it gets it over REST from the central Java backend.
+- **Results go back into the pipeline.** The intervals and their calculated values are published to the MQTT pipeline, so the rest of the system can use them like any other data.
+
+## The hard parts
+
+- **Performance.** Every incoming value can affect triggers and running calculations, so the service has to keep up with the full data stream.
+- **Calculating in real time.** KPIs have to be correct while an interval is still open, not only once it closes.
+- **Trigger timing across sources.** Conditions often combine data from different sources, which don't arrive at the same moment. Triggers still have to fire at the right time.
+
+## Outcome
+
+The feature is in production and used by every customer of the software. Customers configure their own use cases with it to analyze and optimize their production processes.
