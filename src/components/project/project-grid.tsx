@@ -21,6 +21,8 @@ export function ProjectGrid({ projects }: { projects: Project[] }) {
                 src={project.cover}
                 alt={project.coverAlt}
                 fill
+                // The first row is above the fold and holds the LCP image.
+                loading={index < 2 ? "eager" : "lazy"}
                 placeholder="blur"
                 sizes={
                   isWide(index)
