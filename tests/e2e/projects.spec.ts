@@ -72,6 +72,22 @@ test.describe("the landing page links to the newest project", () => {
   }
 });
 
+test("opens a case study image in a zoomable dialog", async ({ page }) => {
+  const [project] = projects;
+  if (!project) throw new Error("Expected at least one project in content/");
+  await page.goto(`/projects/${project.category}/${project.slug}`);
+
+  await page.getByRole("link", { name: project.coverAlt }).click();
+  const dialog = page.getByRole("dialog", { name: project.coverAlt });
+  await expect(dialog).toBeVisible();
+
+  await dialog.getByRole("button", { name: "Zoom in" }).click();
+  await expect(dialog.getByRole("button", { name: "Zoom out" })).toBeVisible();
+
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+});
+
 // Unknown categories render on demand and stream, so the first response can be a 200.
 // What matters is that visitors see the not-found page and that it is marked noindex.
 test("shows the not-found page for unknown categories", async ({ page }) => {
