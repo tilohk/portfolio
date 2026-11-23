@@ -1,6 +1,5 @@
 import { posts, projects } from "#site/content";
 import type { MetadataRoute } from "next";
-import { CATEGORIES } from "@/lib/categories";
 import { siteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -9,11 +8,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     ...pages.map((path) => ({ url: `${origin}${path}` })),
-    ...CATEGORIES.map((category) => ({
-      url: `${origin}/projects/${category}`,
-    })),
     ...projects.map((p) => ({
-      url: `${origin}/projects/${p.category}/${p.slug}`,
+      url: `${origin}/projects/${p.slug}`,
       lastModified: p.date,
     })),
     ...posts.map((p) => ({

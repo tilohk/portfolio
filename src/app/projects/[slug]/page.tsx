@@ -12,23 +12,19 @@ import { BASE_OPEN_GRAPH } from "@/lib/site";
 export const instant = false;
 
 export function generateStaticParams() {
-  return projects.map(({ category, slug }) => ({ category, slug }));
+  return projects.map(({ slug }) => ({ slug }));
 }
 
-async function getProject(
-  params: PageProps<"/projects/[category]/[slug]">["params"],
-) {
-  const { category, slug } = await params;
-  const project = projects.find(
-    (p) => p.slug === slug && p.category === category,
-  );
+async function getProject(params: PageProps<"/projects/[slug]">["params"]) {
+  const { slug } = await params;
+  const project = projects.find((p) => p.slug === slug);
   if (!project) notFound();
   return project;
 }
 
 export async function generateMetadata({
   params,
-}: PageProps<"/projects/[category]/[slug]">): Promise<Metadata> {
+}: PageProps<"/projects/[slug]">): Promise<Metadata> {
   const project = await getProject(params);
   return {
     title: project.title,
@@ -49,12 +45,22 @@ export async function generateMetadata({
 
 export default async function CaseStudyPage({
   params,
-}: PageProps<"/projects/[category]/[slug]">) {
+}: PageProps<"/projects/[slug]">) {
   const project = await getProject(params);
 
   return (
     <article className="px-6 pb-16 lg:px-16 lg:pt-8">
       <PageTitle intro={project.summary}>{project.title}</PageTitle>
+      <ul aria-label="Tags" className="mt-6 flex flex-wrap gap-2">
+        {project.tags.map((tag) => (
+          <li
+            key={tag}
+            className="border border-teal bg-cream px-1.5 py-0.5 text-xs tracking-[0.12em] text-teal uppercase"
+          >
+            {tag}
+          </li>
+        ))}
+      </ul>
 
       <div className="mt-10 max-w-3xl">
         <ImageLightbox src={project.cover.src} alt={project.coverAlt}>

@@ -6,7 +6,7 @@
       "url": [
         "http://localhost:3200/",
         "http://localhost:3200/projects",
-        "http://localhost:3200/projects/software/wall-thickness-control",
+        "http://localhost:3200/projects/wall-thickness-control",
         "http://localhost:3200/journal",
         "http://localhost:3200/resume",
         "http://localhost:3200/contact"

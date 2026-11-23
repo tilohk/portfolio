@@ -1,5 +1,4 @@
 import { defineConfig, s } from "velite";
-import { CATEGORIES } from "./src/lib/categories";
 
 // Resume dates are months, e.g. "2021-03". A missing end date means "present".
 const month = s.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/, "Use YYYY-MM");
@@ -20,9 +19,11 @@ export default defineConfig({
       schema: s.object({
         title: s.string().max(80),
         slug: s.slug("projects"),
-        // `category` sets the URL. `alsoIn` lists the project under further filters.
-        category: s.enum(CATEGORIES),
-        alsoIn: s.array(s.enum(CATEGORIES)).optional(),
+        tags: s
+          .array(
+            s.enum(["software", "music", "case study", "IoT", "open source"]),
+          )
+          .min(1),
         date: s.isodate(),
         summary: s.string().max(200),
         role: s.string(),
