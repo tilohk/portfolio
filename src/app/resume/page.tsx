@@ -15,29 +15,31 @@ export default function ResumePage() {
     <div className="max-w-3xl space-y-12 px-6 pb-16 lg:px-16 lg:pt-8 print:p-0">
       <PageTitle intro={resume.headline}>Resume</PageTitle>
 
-      <section aria-labelledby="experience" className="space-y-8">
+      <section aria-labelledby="experience" className="space-y-4">
         <h2 id="experience" className={sectionTitle}>
           Experience
         </h2>
-        {resume.experience.map((job) => (
-          <article
-            key={`${job.company}-${job.start}`}
-            className="break-inside-avoid"
-          >
-            <h3 className="text-xl font-bold">
-              {job.role}, {job.company}
-            </h3>
-            <p className="text-sm">
-              {formatMonthRange(job.start, job.end)}
-              {job.location && ` · ${job.location}`}
-            </p>
-            <ul className="mt-3 ml-5 list-disc space-y-1">
-              {job.highlights.map((highlight) => (
-                <li key={highlight}>{highlight}</li>
-              ))}
-            </ul>
-          </article>
-        ))}
+        <div className="space-y-8">
+          {resume.experience.map((job) => (
+            <article
+              key={`${job.company}-${job.start}`}
+              className="break-inside-avoid"
+            >
+              <h3 className="text-xl font-bold">
+                {job.role}, {job.company}
+              </h3>
+              <p className="text-sm">
+                {formatMonthRange(job.start, job.end)}
+                {job.location && ` · ${job.location}`}
+              </p>
+              <ul className="mt-3 ml-5 list-disc space-y-1">
+                {job.highlights.map((highlight) => (
+                  <li key={highlight}>{highlight}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
       </section>
 
       <section aria-labelledby="education" className="space-y-6">
