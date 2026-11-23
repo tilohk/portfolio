@@ -16,6 +16,9 @@
   --text-nav--line-height: 1.2;
   --text-filter: clamp(1rem, 0.4rem + 0.9vw, 1.75rem);
   --text-filter--line-height: 1.2;
+
+  /* Mobile header height, shared with the landing page so it can split the screen in half. */
+  --spacing-header: 4.25rem;
 }
 
 @layer base {
