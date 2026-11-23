@@ -56,7 +56,7 @@ export default defineConfig({
       single: true,
       schema: s.object({
         title: s.string(),
-        intro: s.string().max(300),
+        intro: s.string().max(400),
         body: s.mdx(),
       }),
     },

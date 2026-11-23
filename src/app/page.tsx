@@ -7,7 +7,7 @@ import { SITE_NAME, siteUrl } from "@/lib/site";
 const DISCIPLINES = [
   "Software development",
   "Creative technologies",
-  "Music producing",
+  "Music production",
   "UI/UX design",
 ];
 
