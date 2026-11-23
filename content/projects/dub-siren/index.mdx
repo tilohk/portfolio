@@ -1,0 +1,41 @@
+---
+title: dub_siren
+slug: dub-siren
+category: software
+alsoIn: [music]
+date: 2026-11-21
+summary: An open-source instrument plugin modelled on a classic dub siren pedal, with an LFO-swept oscillator, a trigger button and a tape echo that can run into self-oscillation.
+role: Design and development
+stack: [C++20, JUCE 8, CMake, GitHub Actions, Claude Code]
+cover: ./cover.jpg
+coverAlt: The plugin window on a green case. Brushed-metal panels with black knobs are grouped under coloured title bars for Siren, Decay, LFO, Echo and Out. On the right are Throw, Kill and Freeze buttons, a red siren lamp and a large black trigger pad. A preset selector at the top left shows Classic Siren.
+links:
+  repo: https://github.com/tilohk/dub_siren
+---
+
+## Context
+
+dub_siren is an instrument plugin modelled on a classic dub siren pedal: an oscillator swept by an LFO, a trigger button, a pitch sweep when you let go, and a tape-style echo that can run past 100 % feedback into self-oscillation.
+
+The plugin is open source under the AGPLv3. It runs as VST3, AU, LV2 and a standalone app on macOS, Windows and Linux.
+
+## Approach
+
+I built it in Claude Code sessions, with the same phased workflow as [audible_spec](/projects/software/audible-spec) and [flux_filter](/projects/software/flux-filter):
+
+- **Plain C++ sound engine.** The oscillator, LFO, envelope and tape echo are plain C++ without JUCE, so they can be tested offline.
+- **Fewer controls.** The first version exposed 23 controls. I cut them to 14: attack, low cut and echo width became fixed values, Tape and Wow were merged into one knob, and the pitch knob now sets the note the trigger and MIDI C3 play.
+- **Then add what a siren needs.** With the panel trimmed, I added the features that make it play like a performance tool: a Rotor mode, LFO Accel and the Throw, Kill and Freeze buttons for the echo.
+- **Measured, not assumed.** Offline DSP tests check pitch accuracy, release, rotor spin-up and coast, Accel, echo timing, Kill and Freeze, and that 120 % feedback stays bounded.
+- **Visual design.** I supervised the interface by hand. It looks like vintage hardware: brushed-metal panels on a green case, colour-coded section titles and a red siren lamp that lights while it plays. A small tool renders the interface to PNG without opening a window, so the layout can be checked during a session.
+
+## What it does
+
+- Plays a square, saw, triangle or sine wave from the trigger button, MIDI notes or an automated Trigger parameter. Other notes transpose the base pitch, so you can tap one key like a pedal or play melodies.
+- An LFO bends the pitch upwards in seven shapes. **Accel** speeds it up or slows it down while the trigger is held. **Rotor** mode models an air-raid siren that spins up while held and coasts down after release.
+- A tape echo with tempo sync, feedback up to 120 %, Tape wear, Tone and Level. **Throw** plays only the echo, **Kill** stops feeding it and **Freeze** loops what is in it.
+- Drive and a soft limiter on the output. It ships with five factory presets.
+
+## Outcome
+
+Version 1.0.0 is released on GitHub for macOS, Windows and Linux. It passes `pluginval` at strictness level 7 and Apple's `auval`. Every push is built and tested on macOS, Windows and Linux.
