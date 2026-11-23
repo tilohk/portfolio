@@ -72,6 +72,33 @@ test.describe("the landing page links to the newest project", () => {
   }
 });
 
+test.describe("case study images open in a zoomable dialog", () => {
+  const project = projects.find((p) => p.slug === "process-intervals");
+  if (!project) throw new Error("Expected the process-intervals case study");
+
+  // The cover is a next/image child, the diagram a Markdown image inside a <p>.
+  for (const [image, name] of [
+    ["the cover", project.coverAlt],
+    ["a Markdown image", /^Diagram of one span/],
+  ] as const) {
+    test(`from ${image}`, async ({ page }) => {
+      await page.goto(`/projects/${project.category}/${project.slug}`);
+
+      await page.getByRole("link", { name }).click();
+      const dialog = page.getByRole("dialog", { name });
+      await expect(dialog).toBeVisible();
+
+      await dialog.getByRole("button", { name: "Zoom in" }).click();
+      await expect(
+        dialog.getByRole("button", { name: "Zoom out" }),
+      ).toBeVisible();
+
+      await page.keyboard.press("Escape");
+      await expect(dialog).toBeHidden();
+    });
+  }
+});
+
 // Unknown categories render on demand and stream, so the first response can be a 200.
 // What matters is that visitors see the not-found page and that it is marked noindex.
 test("shows the not-found page for unknown categories", async ({ page }) => {

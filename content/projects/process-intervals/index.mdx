@@ -1,0 +1,54 @@
+---
+title: Real-time process intervals and KPIs
+slug: process-intervals
+category: software
+date: 2026-08-01
+summary: A .NET service that splits live production data from MQTT into intervals, calculates their KPIs in real time and links each interval to master data from ERP and MES.
+role: Lead developer
+stack: [C#, .NET, MQTT, REST]
+cover: ./cover.jpg
+coverAlt: Redrawn analysis view. On the left, a line chart plots throughput, torque, pressure and temperature for intervals 101 to 112, and a table lists the KPIs of two selected intervals, product A and product B. On the right, four small charts overlay the raw signals of those two intervals over two hours.
+---
+
+## Context
+
+My employer's main product is a virtual production assistant: software that records production data from every connected machine. Each sensor writes a new value whenever its signal changes, so the full history of every value is available.
+
+Production is usually documented differently. A recipe sets a target temperature, and an operator notes the actual temperature at the start and end of an order. An order of one and a half hours is then described by two data points, while the machine has recorded thousands.
+
+To make that data comparable, you need sections of time with a clear start and end, and key figures for each section. A fitness watch works the same way: you start a run, it records your pulse and pace, and afterwards it shows you the figures for that run.
+
+In the product this feature is called Spans. A span is the configuration, and each instance of it is an interval. What an interval stands for depends on the configuration:
+
+- **Time:** an hour, a shift, a day or a month. For example, the energy used per day or the parts made per shift.
+- **Master data from ERP or MES:** an order, an article, a batch or a roll. For example, the highest temperature while article X was made.
+- **Machine signals:** an alarm, or a pressure above a limit. For example, every situation in which error X occurred, exported for further analysis.
+- **Manual input:** an operator flips a switch on a dashboard to record a test run.
+
+_The analysis view on this page is a redrawn and anonymized version. It doesn't show real customer data._
+
+## My role
+
+I had the main responsibility for this feature, from the first release in 2023 through its ongoing development until 2026.
+
+## How it works
+
+![Diagram of one span. On the left, the MQTT pipeline sends live data to a temperature signal that crosses a dashed line at 100 °C. The start condition, temperature above 100 °C, opens an interval, and the stop condition, temperature below 100 °C, closes it. A dip that stays above 100 °C starts nothing new. Below the first interval, ticks mark live KPIs at the refresh rate and a square marks the final KPIs at the stop. Dashed lines connect the start and stop points to the edges of the interval bars. Five seconds after the stop, the context is taken from master data in ERP, MES or databases. A dashed arrow shows that master data can also feed the KPIs. KPIs and interval events go back into the MQTT pipeline.](./span-flow.jpg)
+
+- **Triggers on the MQTT pipeline.** The service subscribes to the MQTT pipeline that carries the live process data. A start trigger opens an interval and a stop trigger closes it. With a shared trigger, the same condition does both, so one interval ends where the next begins.
+- **Nested conditions.** A trigger is a group of conditions combined with AND or OR, and groups can be nested to any depth. A condition reacts to a value arriving or changing, compares a number or text, or checks a timestamp.
+- **Overlapping intervals.** Several intervals of one span can be open at the same time. A stop closes the oldest one. A span can also be limited to a single open interval, close intervals after a timeout, or shift its start and end by an offset.
+- **KPIs live and at the end.** Each span can calculate aggregations over the values of chosen data points: sum, min, max, average, standard deviation, count, first and last value, the difference between the last and first value, an integral and more. They are calculated once when the interval closes, or also at a configurable refresh rate while it runs. For example, the difference between a meter's last and first value gives the energy used per day, and the integral of a line speed gives the meters produced.
+- **Context data.** Each interval can store the values of chosen data points under an alias, for example the order number. This connects the real-time process data to master data from ERP, MES or databases. Master data can also feed into KPI calculations, for example as offsets, but context is its main use. The service first read master data straight from the database. Today it gets it over REST from the central Java backend.
+- **Results go back into the pipeline.** Every KPI is published to the MQTT pipeline twice: a live value while the interval runs and a final value when it ends. Events for started and stopped intervals and the number of open intervals are published as well. The rest of the system can use all of these like any other data.
+
+## The hard parts
+
+- **Performance.** Every incoming value can affect triggers and running calculations, so the service has to keep up with the full data stream.
+- **Triggering on edges, not states.** The conditions in a group are evaluated on edges. If a temperature rises above a threshold and starts an interval, it has to fall below the threshold again before it can trigger the next one.
+- **A value is valid until the next one.** Sensors only send values when something changes. The last value before an interval starts may still be the current one, so each KPI can include it. For the same reason, the integral is calculated step by step instead of interpolating between values.
+- **Data from different sources arrives at different times.** The context is built a few seconds after the stop condition, five seconds by default and configurable, so values that arrive late still belong to the interval.
+
+## Outcome
+
+The feature is in production and used by every customer of the software. Customers configure their own use cases with it to analyze and optimize their production processes. An analysis view, which I built and improved together with colleagues, lets them compare the KPIs and the raw data of selected intervals, for example two orders of the same product.

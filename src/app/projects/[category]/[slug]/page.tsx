@@ -2,6 +2,7 @@ import { projects } from "#site/content";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { ImageLightbox } from "@/components/image-lightbox";
 import { MdxContent } from "@/components/mdx-content";
 import { PageTitle } from "@/components/page-title";
 import { BASE_OPEN_GRAPH } from "@/lib/site";
@@ -55,16 +56,20 @@ export default async function CaseStudyPage({
     <article className="px-6 pb-16 lg:px-16 lg:pt-8">
       <PageTitle intro={project.summary}>{project.title}</PageTitle>
 
-      <div className="relative mt-10 aspect-[16/10]">
-        <Image
-          src={project.cover}
-          alt={project.coverAlt}
-          fill
-          priority
-          placeholder="blur"
-          sizes="(min-width: 1024px) calc(100vw - 28rem), 100vw"
-          className="object-cover"
-        />
+      <div className="mt-10 max-w-3xl">
+        <ImageLightbox src={project.cover.src} alt={project.coverAlt}>
+          <div className="relative aspect-[16/10]">
+            <Image
+              src={project.cover}
+              alt={project.coverAlt}
+              fill
+              priority
+              placeholder="blur"
+              sizes="(min-width: 48rem) 48rem, 100vw"
+              className="object-cover"
+            />
+          </div>
+        </ImageLightbox>
       </div>
 
       <div className="mt-12 grid gap-12 lg:grid-cols-[16rem_1fr]">
