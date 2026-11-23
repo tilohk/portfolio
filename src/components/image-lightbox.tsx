@@ -49,7 +49,10 @@ export function ImageLightbox({
             className="m-0 flex h-dvh max-h-none w-dvw max-w-none overflow-auto bg-transparent p-4 backdrop:bg-ink"
           >
             <form method="dialog">
-              <button className="fixed top-4 right-4 z-10 bg-cream px-3 py-1 text-sm tracking-[0.2em] uppercase">
+              <button
+                type="submit"
+                className="fixed top-4 right-4 z-10 bg-cream px-3 py-1 text-sm tracking-[0.2em] uppercase"
+              >
                 Close
               </button>
             </form>

@@ -72,20 +72,31 @@ test.describe("the landing page links to the newest project", () => {
   }
 });
 
-test("opens a case study image in a zoomable dialog", async ({ page }) => {
-  const [project] = projects;
-  if (!project) throw new Error("Expected at least one project in content/");
-  await page.goto(`/projects/${project.category}/${project.slug}`);
+test.describe("case study images open in a zoomable dialog", () => {
+  const project = projects.find((p) => p.slug === "process-intervals");
+  if (!project) throw new Error("Expected the process-intervals case study");
 
-  await page.getByRole("link", { name: project.coverAlt }).click();
-  const dialog = page.getByRole("dialog", { name: project.coverAlt });
-  await expect(dialog).toBeVisible();
+  // The cover is a next/image child, the diagram a Markdown image inside a <p>.
+  for (const [image, name] of [
+    ["the cover", project.coverAlt],
+    ["a Markdown image", /^Diagram of one span/],
+  ] as const) {
+    test(`from ${image}`, async ({ page }) => {
+      await page.goto(`/projects/${project.category}/${project.slug}`);
 
-  await dialog.getByRole("button", { name: "Zoom in" }).click();
-  await expect(dialog.getByRole("button", { name: "Zoom out" })).toBeVisible();
+      await page.getByRole("link", { name }).click();
+      const dialog = page.getByRole("dialog", { name });
+      await expect(dialog).toBeVisible();
 
-  await page.keyboard.press("Escape");
-  await expect(dialog).toBeHidden();
+      await dialog.getByRole("button", { name: "Zoom in" }).click();
+      await expect(
+        dialog.getByRole("button", { name: "Zoom out" }),
+      ).toBeVisible();
+
+      await page.keyboard.press("Escape");
+      await expect(dialog).toBeHidden();
+    });
+  }
 });
 
 // Unknown categories render on demand and stream, so the first response can be a 200.
