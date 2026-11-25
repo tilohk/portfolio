@@ -3,12 +3,32 @@ import { ImageLightbox } from "@/components/image-lightbox";
 
 type MdxModule = { default: (props: object) => React.ReactNode };
 
-// Markdown images only carry src and alt, so next/image can't size them.
-function MdxImage({ src = "", alt = "" }: { src?: string; alt?: string }) {
+// Markdown images aren't imported, so next/image can't optimize them. Their size comes
+// from velite.config.ts and reserves their space while they load.
+function MdxImage({
+  src = "",
+  alt = "",
+  width,
+  height,
+}: {
+  src?: string;
+  alt?: string;
+  // Compiled MDX passes them as strings.
+  width?: string;
+  height?: string;
+}) {
   return (
     <ImageLightbox src={src} alt={alt}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={alt} loading="lazy" decoding="async" />
+      <img
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        loading="lazy"
+        decoding="async"
+        className="h-auto"
+      />
     </ImageLightbox>
   );
 }
