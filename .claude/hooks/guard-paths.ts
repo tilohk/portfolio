@@ -12,8 +12,7 @@ const PROTECTED: { pattern: RegExp; reason: string }[] = [
   },
   {
     pattern: /-snapshots\//,
-    reason:
-      "Visual baselines only change via `pnpm test:visual:update` when the user asks for it.",
+    reason: "Visual baselines only change when the user asks for it.",
   },
 ];
 

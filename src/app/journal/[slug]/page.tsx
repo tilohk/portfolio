@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { MdxContent } from "@/components/mdx-content";
 import { PageTitle } from "@/components/page-title";
 import { formatDate } from "@/lib/dates";
+import { BASE_OPEN_GRAPH } from "@/lib/site";
 
 // Every path is prerendered from generateStaticParams, so reading params up front is cheap and keeps
 // the full page in the static HTML (no streaming, works without JavaScript).
@@ -24,7 +25,17 @@ export async function generateMetadata({
   params,
 }: PageProps<"/journal/[slug]">): Promise<Metadata> {
   const post = await getPost(params);
-  return { title: post.title, description: post.summary };
+  return {
+    title: post.title,
+    description: post.summary,
+    openGraph: {
+      ...BASE_OPEN_GRAPH,
+      type: "article",
+      publishedTime: post.date,
+      // Overriding openGraph drops the inherited image, so the site's default is named again.
+      images: "/opengraph-image",
+    },
+  };
 }
 
 export default async function PostPage({

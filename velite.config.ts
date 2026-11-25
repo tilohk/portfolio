@@ -1,17 +1,51 @@
-import { defineConfig, s } from "velite";
+import { readFile } from "node:fs/promises";
+import { assets, defineConfig, getImageMetadata, s } from "velite";
 
 // Resume dates are months, e.g. "2021-03". A missing end date means "present".
 const month = s.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/, "Use YYYY-MM");
+
+const ASSET_BASE = "/static/";
+
+interface MarkdownNode {
+  type: string;
+  url?: string;
+  children?: MarkdownNode[];
+  data?: { hProperties?: { width: number; height: number } };
+}
+
+// Markdown images carry no size, so the page would jump while they load. By the time this
+// runs, Velite has copied each image and recorded its source file, so the size is read from that.
+const remarkImageSize = () => async (tree: MarkdownNode) => {
+  const images: MarkdownNode[] = [];
+  const collect = (node: MarkdownNode) => {
+    if (node.type === "image") images.push(node);
+    node.children?.forEach(collect);
+  };
+  collect(tree);
+
+  await Promise.all(
+    images.map(async (image) => {
+      const source = assets.get(image.url?.replace(ASSET_BASE, "") ?? "");
+      if (!source) return;
+      const metadata = await getImageMetadata(await readFile(source));
+      if (metadata) {
+        const { width, height } = metadata;
+        image.data = { hProperties: { width, height } };
+      }
+    }),
+  );
+};
 
 export default defineConfig({
   strict: true,
   output: {
     data: ".velite",
     assets: "public/static",
-    base: "/static/",
+    base: ASSET_BASE,
     name: "[name]-[hash:6].[ext]",
     clean: true,
   },
+  mdx: { remarkPlugins: [remarkImageSize] },
   collections: {
     projects: {
       name: "Project",

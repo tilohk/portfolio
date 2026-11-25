@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { SITE_NAME } from "@/lib/site";
 
-export const alt = `${SITE_NAME}: software development, creative technologies, music producing and UI/UX design`;
+export const alt = `${SITE_NAME}: software development, creative technologies, music production and UI/UX design`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -40,7 +40,7 @@ export default function OpengraphImage() {
       >
         <span>SOFTWARE DEVELOPMENT</span>
         <span>CREATIVE TECHNOLOGIES</span>
-        <span>MUSIC PRODUCING &amp; DJ</span>
+        <span>MUSIC PRODUCTION</span>
         <span>UI/UX DESIGN</span>
       </div>
     </div>,
