@@ -11,7 +11,7 @@ Tests should catch real regressions without slowing work down or testing impleme
 
 - **Vitest** for logic in `src/lib/`, server actions and the Claude Code hooks (coverage ≥ 80% on `src/lib`).
 - **Playwright** for user journeys on desktop and mobile viewports, with an **axe** accessibility check on every route. External services are replaced by local mocks (e.g. `tests/e2e/mock-resend.ts`), never our own code.
-- **Lighthouse CI** with budgets in `lighthouserc.json` (performance ≥ 95, accessibility, best practices and SEO = 100, on mobile emulation). It runs against a local production build rather than Vercel previews: previews sit behind Vercel's login, and a local build gives more stable scores.
+- **Lighthouse CI** with budgets in `lighthouserc.json` (performance ≥ 90, accessibility, best practices and SEO = 100, on mobile emulation). Performance scores on shared CI runners vary by a few points between identical runs, so that budget leaves room for the noise. It runs against a local production build rather than Vercel previews: previews sit behind Vercel's login, and a local build gives more stable scores.
 - Static checks: Prettier, ESLint (Next.js + typescript-eslint strict), `tsc`, and **Knip** for unused code and dependencies.
 - **Security and freshness:** CodeQL (JavaScript/TypeScript and workflow files) and weekly grouped Dependabot updates.
 
