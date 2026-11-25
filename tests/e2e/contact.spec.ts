@@ -33,6 +33,7 @@ test("sends a message and thanks the visitor", async ({ page }, testInfo) => {
   await page.getByRole("button", { name: "Send message" }).click();
 
   await expect(page.getByRole("status")).toHaveText(/Thank you/);
+  await expect(page.getByRole("status")).toBeFocused();
   await expect
     .poll(() => sentEmailsFrom(email))
     .toEqual([

@@ -22,8 +22,15 @@ export function ContactForm() {
   } as ContactState);
 
   if (state.status === "success") {
+    // The focused submit button disappears with the form, so focus moves here.
+    // That keeps keyboard users in place and makes screen readers read the message.
     return (
-      <p role="status" className="text-xl">
+      <p
+        role="status"
+        tabIndex={-1}
+        ref={(message) => message?.focus()}
+        className="text-xl"
+      >
         Thank you! Your message is on its way, and I’ll get back to you soon.
       </p>
     );
