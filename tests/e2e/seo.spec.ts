@@ -38,6 +38,15 @@ test("RSS feed contains every journal post", async ({ request }) => {
   }
 });
 
+test("pages send basic security headers", async ({ request }) => {
+  const headers = (await request.get("/")).headers();
+  expect(headers).toMatchObject({
+    "x-content-type-options": "nosniff",
+    "referrer-policy": "strict-origin-when-cross-origin",
+    "content-security-policy": "frame-ancestors 'none'",
+  });
+});
+
 test("the default Open Graph image renders", async ({ request }) => {
   const response = await request.get("/opengraph-image");
   expect(response.status()).toBe(200);
@@ -60,6 +69,16 @@ for (const path of ["/", ...contentPaths]) {
     await expect(
       page.locator('link[type="application/rss+xml"]'),
     ).toHaveAttribute("href", /\/feed\.xml$/);
+  });
+}
+
+for (const post of posts) {
+  test(`/journal/${post.slug} is shared as an article`, async ({ page }) => {
+    await page.goto(`/journal/${post.slug}`);
+    await expect(page.locator('meta[property="og:type"]')).toHaveAttribute(
+      "content",
+      "article",
+    );
   });
 }
 

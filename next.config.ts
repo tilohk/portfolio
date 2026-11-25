@@ -7,6 +7,17 @@ import {
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
+  headers: async () => [
+    {
+      source: "/:path*",
+      headers: [
+        { key: "X-Content-Type-Options", value: "nosniff" },
+        { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+        // The site is never meant to be embedded, which also rules out clickjacking.
+        { key: "Content-Security-Policy", value: "frame-ancestors 'none'" },
+      ],
+    },
+  ],
   // Projects used to live under a category, e.g. /projects/software/flux-filter.
   redirects: async () => [
     {
