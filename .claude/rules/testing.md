@@ -10,8 +10,7 @@ paths:
 Test at the cheapest level that proves the behavior:
 
 - **Logic in `src/lib/` and hooks:** Vitest unit tests next to the file (`*.test.ts`).
-- **Component behavior** (state, interaction): Vitest + Testing Library. Query by role and accessible name, not by class or test id.
-- **User journeys, routing, a11y:** Playwright in `tests/e2e/`. Every new route gets an axe check.
+- **Component behavior, user journeys, routing, a11y:** Playwright in `tests/e2e/`. Query by role and accessible name, not by class or test id. Every new route gets an axe check.
 
 Rules:
 
