@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { MdxContent } from "@/components/mdx-content";
 import { PageTitle } from "@/components/page-title";
 import { formatDate } from "@/lib/dates";
+import { readingMinutes } from "@/lib/reading-time";
 import { BASE_OPEN_GRAPH } from "@/lib/site";
 
 // Every path is prerendered from generateStaticParams, so reading params up front is cheap and keeps
@@ -48,7 +49,7 @@ export default async function PostPage({
       <div>
         <p className="mb-4 text-sm tracking-[0.2em] text-teal uppercase">
           <time dateTime={post.date}>{formatDate(post.date)}</time> ·{" "}
-          {post.metadata.readingTime} min read
+          {readingMinutes(post.metadata.wordCount)} min read
         </p>
         <PageTitle intro={post.summary}>{post.title}</PageTitle>
       </div>
