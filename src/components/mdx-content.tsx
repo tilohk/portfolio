@@ -59,7 +59,10 @@ function Album({
         className="h-[120px] w-full"
       />
       <p className="text-base text-ink/75">
-        {label} · {formatDate(released)} · <a href={url}>Bandcamp</a>
+        {label} · {formatDate(released)} ·{" "}
+        <a href={url} aria-label={`${title} on Bandcamp`}>
+          Bandcamp
+        </a>
       </p>
       {children}
     </div>
