@@ -20,6 +20,24 @@ test("journal lists posts newest first and opens a post", async ({ page }) => {
   );
 });
 
+test("album post has a named Bandcamp player and link per album", async ({
+  page,
+}) => {
+  await page.goto("/journal/dub-albums-2026");
+  await expect(page.locator('iframe[title^="Bandcamp player: "]')).toHaveCount(
+    5,
+  );
+  await expect(
+    page.getByRole("link", { name: "Priori – 9 on Bandcamp" }),
+  ).toHaveAttribute(
+    "href",
+    "https://kynantrecords.bandcamp.com/album/priori-9",
+  );
+  await expect(page.getByRole("link", { name: / on Bandcamp$/ })).toHaveCount(
+    5,
+  );
+});
+
 test("resume shows every role and skill group", async ({ page }) => {
   await page.goto("/resume");
   const experience = page.getByRole("region", { name: "Experience" });
