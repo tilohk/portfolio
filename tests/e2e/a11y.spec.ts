@@ -20,6 +20,8 @@ for (const route of ROUTES) {
 
     const { violations } = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
+      // Bandcamp's player is third-party markup we can't fix.
+      .exclude('iframe[src^="https://bandcamp.com/"]')
       .analyze();
     expect(violations).toEqual([]);
   });

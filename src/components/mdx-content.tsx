@@ -1,5 +1,6 @@
 import * as runtime from "react/jsx-runtime";
 import { ImageLightbox } from "@/components/image-lightbox";
+import { formatDate } from "@/lib/dates";
 
 type MdxModule = { default: (props: object) => React.ReactNode };
 
@@ -33,11 +34,43 @@ function MdxImage({
   );
 }
 
+// `player` is the album ID from Bandcamp's Share / Embed code.
+function Album({
+  player,
+  title,
+  label,
+  released,
+  url,
+  children,
+}: {
+  player: string;
+  title: string;
+  label: string;
+  released: string;
+  url: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="space-y-4">
+      <iframe
+        src={`https://bandcamp.com/EmbeddedPlayer/album=${player}/size=large/artwork=small/tracklist=false/transparent=true/`}
+        title={`Bandcamp player: ${title}`}
+        loading="lazy"
+        className="h-[120px] w-full"
+      />
+      <p className="text-base text-ink/75">
+        {label} · {formatDate(released)} · <a href={url}>Bandcamp</a>
+      </p>
+      {children}
+    </div>
+  );
+}
+
 // Velite compiles MDX at build time to a function body. Evaluating it yields the MDX
 // function, which uses no hooks, so it is called directly instead of mounted as a component.
 function renderMdx(code: string) {
   const mdx = new Function(code)({ ...runtime }) as MdxModule;
-  return mdx.default({ components: { img: MdxImage } });
+  return mdx.default({ components: { img: MdxImage, Album } });
 }
 
 export function MdxContent({ code }: { code: string }) {
